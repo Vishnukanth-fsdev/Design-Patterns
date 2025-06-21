@@ -63,3 +63,42 @@ Advantages
 | **Database Connector**  | Based on configuration: MySQL, PostgreSQL, MongoDB — factory gives correct connector  |
 
 
+Abstract Factory Design Pattern
+===============================
+-> the Abstract Factory Design Pattern is indeed similar to the Factory Pattern but goes one level higher by providing a factory of factories.
+-> The Abstract Factory Pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+-> “Factory of Factories” — because it creates a group of factories.
+
+| Scenario         | Explanation                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| GUI Toolkit      | You have multiple themes (Windows, Mac, Linux). Each theme needs to create **Buttons**, **Checkboxes**, etc. |
+| Abstract Factory | Create a `GUIFactory` that returns the correct Button and Checkbox factory depending on the OS.              |
+
+
+ Builder Design Pattern
+=======================
+-> while creating object when object contain may attributes there are many problem exists :
+ 1. we have to pass many arguments to create object.
+ 2. some parameters might be optional
+ 3. factory class takes all responsibility for creating object . if the object is heavy then all complexity is the part of factory class. So in   builder pattern be create object step by step and finally return final object with desired values of attributes
+
+| Use Case                               | Why Builder?                                  |
+| -------------------------------------- | --------------------------------------------- |
+| **Creating complex JavaBeans or DTOs** | Many optional fields, constructors get ugly   |
+| **Creating an HTTP Request**           | Need to add headers, body, auth, query params |
+| **Building SQL queries**               | Add select, where, group by, having, etc.     |
+| **UI construction**                    | Build screens with optional components        |
+| **Test Data Builders**                 | Build dummy/mock objects with flexible values |
+
+Prototype Design Pattern
+========================
+ -> The concept is to copy an existing object rather than creating a new instance from scratch. because creating new object may be costly. This approach saves costly resources and time, especially when object creation is a heavy process.
+
+| Use Case                 | Why Prototype?                                               |
+| ------------------------ | ------------------------------------------------------------ |
+| **Document Templates**   | Create new documents from a pre-defined structure            |
+| **Game Development**     | Clone similar enemies/characters efficiently                 |
+| **Graphic Editors**      | Clone shapes with properties like size, color                |
+| **Data Caching**         | Clone objects from a cached prototype instead of re-fetching |
+| **UI Prototyping Tools** | Duplicate UI components for reuse                            |
+
