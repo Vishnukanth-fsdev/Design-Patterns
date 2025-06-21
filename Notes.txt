@@ -1,0 +1,65 @@
+Singleton Desgin Pattern
+========================
+What is the Singleton Pattern?
+-> The Singleton Design Pattern ensures that only one instance of a class is created and that the same instance is used everywhere in the application.
+-> It also provides a global point of access to that instance.
+
+-> Singleton object are the object which are instantiated only once for project. If we try to get the object then we get same object again and again.
+
+Breaking Singleton Design Pattern
+---------------------------------
+There are three ways to break singleton design pattern
+ 1. Using Reflection API
+ -> With the help of relfection api we can call private constructor as well and create multiple object by calling private constructor.
+      solution
+       we can do the soultion in two ways.
+       a. using ENUM
+       b. check the object in private constructor if the object exists then throw exception to terminate the execution.
+ 2. Using Deserialization
+ -> when weserialze and deserialze the singleton object then singleton automatically got destroyed and provide us different object.
+       solution:
+       just implement readResolve() method
+       public Object readResolve() {
+       return ob;
+       }
+ 3. Using cloning
+ ->  when we clone then also we get different object.
+      solution
+       just override clone method and return the same instance.
+       @Override
+       public Object clone() throws CloneNotSupportedException {
+       return samosa;
+       }
+
+
+| Use Case                     | Why Singleton?                                                       | Example                                          |
+| ---------------------------- | -------------------------------------------------------------------- | ------------------------------------------------ |
+| **Logger**                   | Only one logging instance should exist to write to a single log file | `Logger.getInstance().log("Some log")`           |
+| **Database Connection Pool** | Avoid creating multiple heavy DB connections                         | `DBConnectionPool.getInstance().getConnection()` |
+| **Configuration Settings**   | Load once and reuse throughout the app                               | `Config.getInstance().get("db.url")`             |
+| **Cache**                    | Centralized in-memory data store                                     | `CacheManager.getInstance().put("key", "value")` |
+| **Thread Pool Manager**      | Only one thread pool managing background tasks                       | `ThreadPool.getInstance().submit(task)`          |
+
+Best Practices:
+-> Use Enum Singleton (recommended in Java) to avoid reflection and serialization issues.
+-> Avoid using Singleton just for convenience. Use it only when single instance is logically required.
+
+Factory Desgin Pattern
+======================
+-> When there is superclass and multiple subclasses and we want to get object of subclasses based on input and requirement. 
+   Then we create factory class which takes the responsibility of creating object of class based on input.
+
+Advantages
+ 1. Focus on creating object for Interface rather than implementation.
+ 2. Loose coupling, more robust code
+ 3. Supports polymorphism
+ 4. Code reuse 
+
+| Use Case                | Description                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| **Shape Drawing App**   | User selects shape: circle, square, triangle — factory returns the appropriate object |
+| **Document Readers**    | Open file with `.doc`, `.pdf`, `.txt` — factory returns appropriate reader class      |
+| **Notification System** | Send SMS, Email, or Push notification — factory decides which notifier class to use   |
+| **Database Connector**  | Based on configuration: MySQL, PostgreSQL, MongoDB — factory gives correct connector  |
+
+
