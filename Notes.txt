@@ -563,6 +563,57 @@ Prototype Design Pattern
 ========================
  -> The concept is to copy an existing object rather than creating a new instance from scratch. because creating new object may be costly. This approach saves costly resources and time, especially when object creation is a heavy process.
 
+Example: 
+  package PrototypeDesignPattern;
+  class NetworkConnection implements Cloneable{  
+      private String ip;
+      private String impdata;
+      public String getIp() {
+          return ip;
+      }
+      public void setIp(String ip) {
+          this.ip = ip;
+      }
+      public String getImpdata() {
+          return impdata;
+      }
+      public void setImpdata(String impdata) {
+          this.impdata = impdata;
+      }
+  
+      public void loadImpData() throws InterruptedException{
+          this.impdata="This is very Importnat Data";
+          Thread.sleep(5000);
+      }
+      @Override
+      public String toString() {
+          return "NetworkConnection [ip=" + ip + ", impdata=" + impdata + "]";
+      }     
+      @Override
+      public Object clone() throws CloneNotSupportedException{
+          return super.clone();
+      } 
+  }
+  package PrototypeDesignPattern;
+  public class Main {  
+      public static void main(String[] args) throws InterruptedException {        
+          NetworkConnection nw=new NetworkConnection();
+          nw.setIp("196.05.04.123");
+          nw.loadImpData();
+          System.out.println(nw); 
+          try{
+             NetworkConnection nw2=(NetworkConnection)nw.clone();
+             NetworkConnection nw3=(NetworkConnection)nw.clone();
+             nw2.setImpdata("Important data 2");
+             nw3.setImpdata("Important Data 3");
+             System.out.println(nw2);
+             System.out.println(nw3);
+          }catch(Exception e){
+              e.printStackTrace();
+          }  
+      }      
+  }
+
 | Use Case                 | Why Prototype?                                               |
 | ------------------------ | ------------------------------------------------------------ |
 | **Document Templates**   | Create new documents from a pre-defined structure            |
