@@ -5,23 +5,223 @@ What is the Singleton Pattern?
 -> It also provides a global point of access to that instance.
 
 -> Singleton object are the object which are instantiated only once for project. If we try to get the object then we get same object again and again.
+Example: Lazy Loading
+  package SingletonDesignPattern;
+//Lazy Loading Singleton Design Pattern Example
+class PrimeMinister{
+    private static PrimeMinister pm;
+    private PrimeMinister(){
 
+    }
+    public static PrimeMinister getObject(){
+        if(pm==null){
+            pm=new PrimeMinister();
+        }
+        return pm;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        PrimeMinister pm1=PrimeMinister.getObject();
+        System.out.println(pm1.hashCode());
+        PrimeMinister pm2 =PrimeMinister.getObject();
+        System.out.println(pm2.hashCode());       
+        PrimeMinister pm3 =PrimeMinister.getObject();
+        System.out.println(pm3.hashCode());
+    }   
+}
+
+  Example: Eager Loading
+  package SingletonDesignPattern;
+  //Eager Loading Singleton Design Pattern Example
+  public class PrimeMinister1 {
+      private static PrimeMinister1 pm=new PrimeMinister1();
+      public static PrimeMinister1 getObject() throws NullPointerException{
+          return pm;
+      }   
+  }
+  package SingletonDesignPattern;  
+  public class Main1 {
+      public static void main(String[] args) {          
+          PrimeMinister1 pm1=PrimeMinister1.getObject();
+          System.out.println(pm1.hashCode());  
+          PrimeMinister1 pm2=PrimeMinister1.getObject();
+          System.out.println(pm2.hashCode());
+     }    
+  }
+
+    Example:Synchronizarion
+   package SingletonDesignPattern; 
+   public class PrimeMinister2 { 
+       private static PrimeMinister2 pm;   
+       private PrimeMinister2(){
+   
+       }
+      //Here we done Method Synchronized
+       // public static synchronized PrimeMinister2 getObject(){
+       //     if(pm==null){
+       //         pm=new PrimeMinister2();
+       //     }
+       //     return pm;
+       // }  
+       //Here we done Syncronization Block 
+       public static PrimeMinister2 getObject(){
+           if(pm==null){
+               synchronized(PrimeMinister2.class){
+                   if(pm==null){
+                       pm=new PrimeMinister2();
+                   }              
+               }           
+           }
+           return pm;
+       }     
+   }
+    package SingletonDesignPattern; 
+    public class Main2 {    
+        public static void main(String[] args) {          
+            PrimeMinister2 pm1=PrimeMinister2.getObject();
+            System.out.println(pm1.hashCode());
+            PrimeMinister2 pm2=PrimeMinister2.getObject();
+            System.out.println(pm2.hashCode());
+        }        
+    }
 Breaking Singleton Design Pattern
 ---------------------------------
 There are three ways to break singleton design pattern
  1. Using Reflection API
  -> With the help of relfection api we can call private constructor as well and create multiple object by calling private constructor.
+     Example: 
+    package SingletonDesignPattern;
+     public class PrimeMinister3 { 
+         //Breaking Single ton Design Pattern using Reflection Api
+         private static PrimeMinister3 pm; 
+         private PrimeMinister3(){
+     
+         }
+         public static PrimeMinister3 getObject(){
+             if(pm==null){
+                 synchronized(PrimeMinister3.class){
+                     if(pm==null){
+                         pm=new PrimeMinister3();
+                     }
+                 }
+             }
+             return pm;
+         } 
+     }
+     package SingletonDesignPattern;
+     import java.lang.reflect.Constructor; 
+     public class Main3 {
+         public static void main(String[] args) throws Exception{       
+             Constructor<PrimeMinister3> con= PrimeMinister3.class.getDeclaredConstructor();
+             con.setAccessible(true);
+             PrimeMinister3 pm1=con.newInstance();
+             System.out.println(pm1.hashCode());
+             PrimeMinister3 pm2=PrimeMinister3.getObject();
+             System.out.println(pm2.hashCode());
+         }    
+     }
+     ---------------------------------------------------------------------------------------------------------------------------------
       solution
        we can do the soultion in two ways.
        a. using ENUM
+           Example: 
+           package SingletonDesignPattern;
+           public enum PrimeMinister4 {
+           INSTANCE
+           }
+          package SingletonDesignPattern;   
+          public class Main4 {
+              public static void main(String[] args) {                
+                  PrimeMinister4 pm1=PrimeMinister4.INSTANCE;
+                  System.out.println(pm1.hashCode());      
+                  PrimeMinister4 pm2=PrimeMinister4.INSTANCE;
+                  System.out.println(pm2.hashCode());
+              }    
+          }
        b. check the object in private constructor if the object exists then throw exception to terminate the execution.
- 2. Using Deserialization
- -> when weserialze and deserialze the singleton object then singleton automatically got destroyed and provide us different object.
-       solution:
-       just implement readResolve() method
-       public Object readResolve() {
-       return ob;
-       }
+          Example:
+          package SingletonDesignPattern;
+          public class PrimeMinister5 {
+              private static PrimeMinister5 pm;
+              private PrimeMinister5(){   
+                  if(pm!=null){
+                      throw new RuntimeException("You are trying to break singlton desgign pattern");
+                  }
+              }
+              public static PrimeMinister5 getObject(){
+                  if(pm==null){
+                      synchronized(PrimeMinister5.class){
+                          if(pm==null){
+                              pm=new PrimeMinister5();
+                          }
+                      }
+                  }
+                  return pm;    
+              }  
+          }
+          package SingletonDesignPattern;
+          import java.lang.reflect.Constructor;
+          public class Main5 {
+           public static void main(String[] args) throws Exception{     
+              PrimeMinister5 pm1=PrimeMinister5.getObject();
+              System.out.println(pm1.hashCode());     
+              Constructor<PrimeMinister5> con = PrimeMinister5.class.getDeclaredConstructor();
+              con.setAccessible(true);
+              PrimeMinister5 pm2=con.newInstance();
+              System.out.println(pm2.hashCode());    
+           }        
+          }
+  2. Using Deserialization
+  -> when weserialze and deserialze the singleton object then singleton automatically got destroyed and provide us different object.
+   solution:
+   just implement readResolve() method
+   public Object readResolve() {
+   return ob;
+   }
+      Example:
+      package SingletonDesignPattern;
+      import java.io.Serializable; 
+      public class PrimeMinister6 implements Serializable{    
+          private  static PrimeMinister6 pm;    
+          private PrimeMinister6(){
+             
+          } 
+          public static PrimeMinister6 getObject(){
+              if(pm==null){
+                  synchronized(PrimeMinister6.class){
+                      if(pm==null){
+                          pm=new PrimeMinister6();
+                      }
+                  }
+              }
+              return pm;
+          }
+        public Object readResolve(){
+          return pm;
+        }
+      }
+
+      package SingletonDesignPattern;
+     import java.io.FileInputStream;
+     import java.io.FileOutputStream;
+     import java.io.ObjectInputStream;
+     import java.io.ObjectOutputStream;
+     public class Main6 {
+         public static void main(String[] args) throws Exception {
+             PrimeMinister6 pm1=PrimeMinister6.getObject();
+             ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream("abc.ob"));
+             oos.writeObject(pm1);
+             oos.close();
+             System.out.println(pm1.hashCode());
+             ObjectInputStream ois=new ObjectInputStream(new FileInputStream("abc.ob"));
+             PrimeMinister6 pm2=(PrimeMinister6)ois.readObject();
+             ois.close();
+             System.out.println(pm2.hashCode());
+         } 
+     }
+
  3. Using cloning
  ->  when we clone then also we get different object.
       solution
@@ -30,6 +230,44 @@ There are three ways to break singleton design pattern
        public Object clone() throws CloneNotSupportedException {
        return samosa;
        }
+
+      Example:
+      package SingletonDesignPattern;
+      public class PrimeMinister7  implements Cloneable{    
+          private static PrimeMinister7 pm;   
+          private PrimeMinister7(){
+           
+          }
+          public static PrimeMinister7 getObject(){
+              if(pm==null){
+                  synchronized(PrimeMinister7.class){
+                      if(pm==null){
+                          pm=new PrimeMinister7();
+                      }
+                  }
+              }
+              return pm;   
+          }
+          // @Override
+          // public Object clone() throws CloneNotSupportedException{
+          //     return super.clone();
+      
+          // }
+          @Override
+          public Object clone(){
+              return pm;
+          }     
+      }
+
+      package SingletonDesignPattern;    
+      public class Main7 {
+      public static void main(String[] args) throws CloneNotSupportedException{       
+          PrimeMinister7 pm1=PrimeMinister7.getObject();
+         System.out.println(pm1.hashCode());          
+         PrimeMinister7 pm2=(PrimeMinister7)pm1.clone();
+         System.out.println(pm2.hashCode());
+          }         
+      }
 
 
 | Use Case                     | Why Singleton?                                                       | Example                                          |
@@ -48,6 +286,81 @@ Factory Desgin Pattern
 ======================
 -> When there is superclass and multiple subclasses and we want to get object of subclasses based on input and requirement. 
    Then we create factory class which takes the responsibility of creating object of class based on input.
+Example: 
+   package FactoryDesignPattern;  
+   public interface Pizza {
+      void prepare(); 
+      void bake(); 
+      void cut(); 
+      void box();
+  }
+  package FactoryDesignPattern;
+  public class BabyCornPizza implements Pizza {
+      @Override
+      public void prepare() {
+         System.out.println("BabyCornPizza Pizza Preparing");
+      }
+      @Override
+      public void bake() {
+         System.out.println("BabyCornPizza Pizza baking");
+      }  
+      @Override
+      public void cut() {
+          System.out.println("BabyCornPizza Pizza Cutting");
+      }
+      @Override
+      public void box() {
+          System.out.println("BabyCornPizza Pizza boxing");
+      }      
+  }
+ package FactoryDesignPattern;
+ public class MargeritaPizza implements Pizza{
+     @Override
+     public void prepare() {
+        System.out.println("MargeritaPizza Pizza Preparing");
+     }
+     @Override
+     public void bake() {
+        System.out.println("MargeritaPizza Pizza baking");
+     } 
+     @Override
+     public void cut() {
+         System.out.println("MargeritaPizza Pizza Cutting");
+     }
+     @Override
+     public void box() {
+         System.out.println("MargeritaPizza Pizza boxing");
+     }     
+ }
+ package FactoryDesignPattern;
+ public class PizzaFactory {
+     public static Object createPizza(String type){
+         if(type.trim().equalsIgnoreCase("MargeritaPizza")){
+             return new MargeritaPizza();
+         }
+         else if(type.trim().equalsIgnoreCase("BabyCornPizza")){
+             return new BabyCornPizza();
+         }
+         else{
+         return null;
+         }
+     }
+ }
+  package FactoryDesignPattern; 
+  public class Main {
+      public static void main(String[] args) {       
+        Pizza p1=(Pizza)PizzaFactory.createPizza("MargeritaPizza");
+        p1.prepare();
+        p1.bake();
+        p1.cut();
+        p1.box(); 
+        Pizza p2=(Pizza)PizzaFactory.createPizza("BabyCornPizza");
+        p2.prepare();
+        p2.bake();
+        p2.cut();
+        p2.box();
+      }      
+  }
 
 Advantages
  1. Focus on creating object for Interface rather than implementation.
