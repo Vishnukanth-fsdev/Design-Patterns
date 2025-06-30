@@ -382,6 +382,92 @@ Abstract Factory Design Pattern
 -> The Abstract Factory Pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
 -> “Factory of Factories” — because it creates a group of factories.
 
+Example:
+ package AbstractFactoryDesignPattern;
+  public interface Employee {
+      String designation();
+      int salary();     
+  }
+  package AbstractFactoryDesignPattern; 
+  public class AndroidDeveloper implements Employee{ 
+      @Override
+      public String designation() {
+        System.out.println("Android Developer");
+        return "ANDROID DEVELOPER";
+      }
+      @Override
+      public int salary() {
+          return 80000;
+      }  
+  }
+    package AbstractFactoryDesignPattern;
+    public class JavaDeveloper implements Employee{    
+        @Override
+        public String designation() {
+          System.out.println("Java Developer");
+          return "JAVADEVELOPER";
+        }   
+        @Override
+        public int salary() {
+           return 60000;
+        }        
+    }
+  package AbstractFactoryDesignPattern;
+  public class WebDeveloper implements Employee{ 
+      @Override
+      public String designation() {
+          System.out.println("Web Developer");
+          return "WEB DEVELOPER";
+      }  
+      @Override
+      public int salary() {
+          return 50000;
+      }      
+  }
+  package AbstractFactoryDesignPattern;
+  public class AndroidFactory extends EmployeeAbstractFactory { 
+      @Override
+      public Employee createEmployee() {
+        return new AndroidDeveloper();
+      }     
+  }
+  package AbstractFactoryDesignPattern;
+  public class WebDevFactory  extends EmployeeAbstractFactory{  
+      @Override
+      public Employee createEmployee() {
+        return new WebDeveloper();
+      }    
+  }
+  package AbstractFactoryDesignPattern;
+  public class JavaDevFactory  extends EmployeeAbstractFactory{
+      @Override
+      public AbstractFactoryDesignPattern.Employee createEmployee() {
+          return new JavaDeveloper();
+      }    
+  }
+  package AbstractFactoryDesignPattern;
+  public class EmployeeFactory {
+      //getEmployee
+      public static Employee getEmployee(EmployeeAbstractFactory factory){
+          return factory.createEmployee();
+      }     
+  }
+  package AbstractFactoryDesignPattern;
+  abstract class EmployeeAbstractFactory {
+    public abstract Employee createEmployee();   
+  }
+  package AbstractFactoryDesignPattern;
+  public class Main {
+      public static void main(String[] args) {    
+          Employee emp1=EmployeeFactory.getEmployee(new JavaDevFactory());
+          System.out.println(emp1.designation());
+          System.out.println(emp1.salary()); 
+          Employee emp2=EmployeeFactory.getEmployee(new WebDevFactory());
+          System.out.println(emp2.designation());
+          System.out.println(emp2.salary());
+      }      
+  }
+
 | Scenario         | Explanation                                                                                                  |
 | ---------------- | ------------------------------------------------------------------------------------------------------------ |
 | GUI Toolkit      | You have multiple themes (Windows, Mac, Linux). Each theme needs to create **Buttons**, **Checkboxes**, etc. |
